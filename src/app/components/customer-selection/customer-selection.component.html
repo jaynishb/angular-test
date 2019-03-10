@@ -1,0 +1,73 @@
+<div class="container">
+  <form (ngSubmit)="orderForm.form.valid && showOrders()" #orderForm="ngForm" novalidate>
+  <div class="row">
+    <div class="col">
+      <h3> Get Orders </h3>
+      <div class="form-group">
+        <label for="sel1">Select Customer:</label>
+        <select 
+          required 
+          class="form-control"
+          placeholder="Select customer"
+          [(ngModel)]="selected.customer"
+          name="customer"
+          [ngClass]="{ 'is-invalid': orderForm.submitted && customer.invalid }"
+          #customer="ngModel"
+          id="sel1">
+          <option *ngFor="let customer of customers" [value]="customer.id">{{ customer.name }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="form-group">
+        <label for="usr">Select start date:</label>
+        <input type="text"
+              class="form-control"
+              id="usr"
+              [value]="today"
+              [autoClose]="true"
+              (focus)="sd.open()"
+              [(ngModel)]="selected.startDate"
+              [ngClass]="{ 'is-invalid': orderForm.submitted && startDate.invalid }"
+              #sd="ngbDatepicker"
+              placeholder="yyyy-mm-dd"
+              ngbDatepicker
+              name="startDate"
+              required
+              #startDate="ngModel">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <label for="usr">Select end date:</label>
+        <input type="text"
+              class="form-control"
+              id="usr"
+              [value]="today"
+              [minDate]="selected.startDate"
+              [autoClose]="true"
+              (focus)="ed.open()"
+              [(ngModel)]="selected.endDate"
+              [ngClass]="{ 'is-invalid': orderForm.submitted && endDate.invalid }"
+              #ed="ngbDatepicker"
+              placeholder="yyyy-mm-dd"
+              name="endDate"
+              ngbDatepicker
+              required
+              #endDate="ngModel">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button 
+        class="btn btn-primary float-right mt-2" 
+        [disabled]="!orderForm.form.valid">
+        Show Orders
+      </button>
+    </div>
+  </div>
+  </form>
+</div>

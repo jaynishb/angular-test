@@ -1,0 +1,73 @@
+<div>
+  <div class="container mt-5" *ngIf="!loading">
+    <div class="row pb-4">
+      <div class="col"><h2><strong>Invoice Details</strong></h2></div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <strong>Selected dates : </strong>{{ queryParams.start_date + " to " + queryParams.end_date }}
+      </div>
+      <div class="col text-right">
+        <strong>Days : </strong>{{ getDateDiffInDays(queryParams.start_date, queryParams.end_date) }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <strong>Total Orders :</strong> {{orders.length}}
+      </div>
+      <div class="col text-right">
+        <strong>Total amount : </strong>{{getOrderTotal(orders) | currency: (orders[0]? orders[0].charge_customer.currency: 'US' )}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <ul class="list-group mt-2">
+          <li *ngFor="let order of orders; let i = index"
+              class="list-group-item">
+              {{i + 1}})
+              <div class="ml-2">
+                <div class="order-header py-2 border-bottom">
+                  <div class="float-left">
+                    <strong>ID : </strong> {{order.id}}
+                  </div>
+                  <div class="float-right">
+                    <strong>Order Total: </strong>{{getOrderItemsTotal(order.items) | currency: order.charge_customer.currency}}
+                  </div>
+                </div>
+                <div class="py-2 border-bottom">
+                  <div class="w-50 d-inline-block recipient-info pr-2">
+                    <strong>Recipient info :</strong>
+                    <div class="ml-2">Name : <strong>{{ order.recipient.name }}</strong></div>
+                    <div class="ml-2">Email : <strong>{{ order.recipient.email }}</strong></div>
+                  </div>
+                  <div class="w-50 d-inline-block delivery-info pl-2 border-left">
+                    <strong>Delivery info :</strong>
+                    <div class="ml-2">Courier : <strong>{{ order.delivery.courier }}</strong></div>
+                    <div class="ml-2">Method : <strong>{{ order.delivery.method }}</strong></div>
+                  </div>
+                </div>
+                <div class="items-info py-2">
+                  <strong class="mb-2">Items info :</strong>
+                  <ul class="list-group mt-2">
+                    <li class="list-group-item font-weight-bold">
+                      <div class="w-50 d-inline-block">Item name </div>
+                      <div class="w-25 text-right d-inline-block">Quantity </div>
+                      <div class="w-25 text-right d-inline-block">Price </div>
+                    </li>
+                    <li class="list-group-item" *ngFor="let item of order.items;">
+                      <div class="w-50 d-inline-block">{{item.name}} </div>
+                      <div class="w-25 text-right d-inline-block">{{item.quantity}} </div>
+                      <div class="w-25 text-right d-inline-block">{{item.total_price.amount | currency: item.total_price.currency}}</div>
+                    </li>
+
+                  </ul>
+                </div>
+              </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading>
+</div>
